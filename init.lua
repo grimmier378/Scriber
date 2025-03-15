@@ -1790,7 +1790,7 @@ local function set_location_options(locations, range)
 		end
 	end
 end
-
+local buyFromCurrent = false
 local function ScriberGUI()
 	if Open then
 		ImGui.SetWindowSize(500, 500, ImGuiCond.Once)
@@ -1814,6 +1814,12 @@ local function ScriberGUI()
 				if ImGui.Button('Scribe spells in currently in inventory') then
 					scribe_inv = true
 					scribe_switch = false
+				end
+				if Merchant_Open() then
+					ImGui.SameLine()
+					if ImGui.Button('Buy Spells') then
+						buyFromCurrent = true
+					end
 				end
 			end
 			if not scribe_switch then
@@ -1894,6 +1900,10 @@ while true do
 	end
 	if scribe_inv then
 		coroutine.resume(inv_scribe)
+	end
+	if buyFromCurrent then
+		BuySpells()
+		buyFromCurrent = false
 	end
 	mq.delay(20)
 end
